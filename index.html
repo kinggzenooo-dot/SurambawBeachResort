@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Surambaw Beach Resort | Unified Master Portal</title>
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: var(--color-bg);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Seamless Viewport Frame */
+    .portal-frame-container {
+      flex: 1;
+      width: 100%;
+      height: calc(100vh - 48px);
+      position: relative;
+      background-color: var(--color-bg);
+    }
+
+    #portalFrame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Universal Auth & Role Controller Bar -->
+  <header class="universal-auth-bar" id="universalAuthBar">
+    <div class="u-bar-left">
+      <div class="u-brand">
+        <svg class="icon icon-md" viewBox="0 0 24 24" style="color: var(--color-primary);"><path d="M2 12c3 0 4-2 6-2s3 2 6 2 4-2 6-2 3 2 4 2"/><path d="M2 17c3 0 4-2 6-2s3 2 6 2 4-2 6-2 3 2 4 2"/><path d="M2 7c3 0 4-2 6-2s3 2 6 2 4-2 6-2 3 2 4 2"/></svg>
+        <span class="u-brand-title">SURAMBAW</span>
+        <span class="u-brand-badge">All-in-One Portal</span>
+      </div>
+
+      <div class="u-role-pill" id="uCurrentRoleBadge">
+        <span class="u-role-dot" id="uRoleDot"></span>
+        <span id="uCurrentRoleText">Mode: Guest (Customer)</span>
+      </div>
+    </div>
+
+    <div class="u-bar-right">
+      <div class="u-switch-group">
+        <span class="u-switch-label">Switch Role:</span>
+        <button class="u-role-btn active" data-role="customer" id="btnRoleCustomer" title="Switch to Customer / Guest Dashboard">
+          <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          Guest
+        </button>
+        <button class="u-role-btn" data-role="staff" id="btnRoleStaff" title="Switch to Staff & Front Desk Portal">
+          <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M19 21V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v16"/><path d="M3 21h18"/></svg>
+          Staff Desk
+        </button>
+        <button class="u-role-btn" data-role="admin" id="btnRoleAdmin" title="Switch to Executive Admin Portal">
+          <svg class="icon icon-sm" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Admin
+        </button>
+      </div>
+
+      <div class="u-user-actions" id="uAuthActions">
+        <div class="u-user-chip">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80" class="u-user-avatar" id="uAvatar" alt="User Avatar" />
+          <span class="u-user-name" id="uUserName">Alexander Wright</span>
+        </div>
+        <button class="u-btn-auth" id="uQuickSwitchBtn">
+          <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Sign In / Switch
+        </button>
+        <button class="u-btn-logout" id="uLogoutBtn">
+          <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Logout
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Seamless Viewport -->
+  <main class="portal-frame-container">
+    <iframe id="portalFrame" src="customer.html" title="Surambaw Resort Active View"></iframe>
+  </main>
+
+  <!-- Sign In & Registration Modal -->
+  <div class="modal-backdrop" id="universalAuthModal">
+    <div class="modal-container" style="max-width: 520px;">
+      <div class="modal-header">
+        <h3 class="modal-title" style="display:flex; align-items:center; gap:0.5rem;">
+          <svg class="icon" viewBox="0 0 24 24" style="color:var(--color-primary);"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          Sign In & Role Switcher
+        </h3>
+        <button class="modal-close-btn" id="authModalCloseBtn">
+          <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      
+      <div class="modal-body">
+        
+        <!-- Quick 1-Click Demo Logins -->
+        <div class="quick-demo-section">
+          <div class="quick-demo-title">⚡ 1-Click Demo Login (Instant Role Switching):</div>
+          <div class="quick-demo-cards">
+            
+            <div class="demo-account-card" onclick="window.UnifiedPortal.loginAsDemo('customer')">
+              <div class="demo-card-role" style="color:var(--color-primary);">🏖️ Guest</div>
+              <div class="demo-card-name">Alexander Wright</div>
+              <div class="demo-card-email">guest@surambaw.com</div>
+            </div>
+
+            <div class="demo-account-card" onclick="window.UnifiedPortal.loginAsDemo('staff')">
+              <div class="demo-card-role" style="color:var(--color-success);">🛎️ Staff Desk</div>
+              <div class="demo-card-name">Maria Santos</div>
+              <div class="demo-card-email">staff@surambaw.com</div>
+            </div>
+
+            <div class="demo-account-card" onclick="window.UnifiedPortal.loginAsDemo('admin')">
+              <div class="demo-card-role" style="color:#A855F7;">👑 Executive Admin</div>
+              <div class="demo-card-name">Arthur Pendelton</div>
+              <div class="demo-card-email">admin@surambaw.com</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Auth Tabs: Sign In vs Sign Up -->
+        <div class="auth-tabs">
+          <button class="auth-tab-btn active" id="tabBtnSignIn">Sign In</button>
+          <button class="auth-tab-btn" id="tabBtnSignUp">Create New Guest Account</button>
+        </div>
+
+        <!-- Sign In Form -->
+        <form id="formSignIn">
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Email Address</label>
+            <input type="email" id="authEmail" class="form-input" style="width: 100%;" placeholder="e.g. guest@surambaw.com" required value="guest@surambaw.com" />
+          </div>
+          <div class="form-group" style="margin-bottom: 1.25rem;">
+            <label class="form-label">Password</label>
+            <input type="password" id="authPassword" class="form-input" style="width: 100%;" placeholder="••••••••" required value="guest123" />
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; justify-content: center;">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+            Sign In & Access Role
+          </button>
+        </form>
+
+        <!-- Sign Up Form -->
+        <form id="formSignUp" style="display: none;">
+          <div class="form-group" style="margin-bottom: 0.85rem;">
+            <label class="form-label">Full Name</label>
+            <input type="text" id="regName" class="form-input" style="width: 100%;" placeholder="e.g. Sofia Rodriguez" required />
+          </div>
+          <div class="form-group" style="margin-bottom: 0.85rem;">
+            <label class="form-label">Email Address</label>
+            <input type="email" id="regEmail" class="form-input" style="width: 100%;" placeholder="e.g. sofia@example.com" required />
+          </div>
+          <div class="form-group" style="margin-bottom: 0.85rem;">
+            <label class="form-label">Contact Phone</label>
+            <input type="tel" id="regPhone" class="form-input" style="width: 100%;" placeholder="+63 917 000 0000" />
+          </div>
+          <div class="form-group" style="margin-bottom: 1.25rem;">
+            <label class="form-label">Create Password</label>
+            <input type="password" id="regPassword" class="form-input" style="width: 100%;" placeholder="Min. 6 characters" required />
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; justify-content: center;">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Register Guest Account
+          </button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Logout Confirmation Modal -->
+  <div class="modal-backdrop" id="universalLogoutModal">
+    <div class="modal-container" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Confirm Logout</h3>
+        <button class="modal-close-btn" id="logoutCloseBtn">
+          <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p style="color: var(--color-text); line-height: 1.6; font-size: 0.95rem;">
+          Are you sure you want to log out of your Surambaw Beach Resort session?
+        </p>
+        <p style="color: var(--color-muted); font-size: 0.85rem; margin-top: 0.5rem;">
+          You can sign back in anytime or switch to another role interface immediately.
+        </p>
+      </div>
+      <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+        <button class="btn btn-outline" id="cancelLogoutBtn">Cancel</button>
+        <button class="btn btn-primary" id="confirmLogoutBtn">Yes, Log Out</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Unified Synchronization & Router Script -->
+  <script src="js/sync.js"></script>
+  <script>
+    class UnifiedAppController {
+      constructor() {
+        this.frame = document.getElementById('portalFrame');
+        this.currentRole = 'customer';
+        this.currentUser = {
+          name: "Alexander Wright",
+          email: "guest@surambaw.com",
+          role: "customer",
+          tier: "Surambaw Gold VIP",
+          avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80"
+        };
+        this.init();
+      }
+
+      async init() {
+        this.bindEvents();
+        await this.syncSession();
+      }
+
+      async syncSession() {
+        const res = await ResortAPI.getMe();
+        if (res && res.authenticated && res.user) {
+          this.currentUser = res.user;
+          this.currentRole = res.user.role;
+        }
+        this.updateHeaderUI();
+      }
+
+      updateHeaderUI() {
+        const text = document.getElementById('uCurrentRoleText');
+        const dot = document.getElementById('uRoleDot');
+        const avatar = document.getElementById('uAvatar');
+        const name = document.getElementById('uUserName');
+
+        const roleMeta = {
+          customer: { title: 'Mode: Guest (Customer)', color: 'var(--color-primary)', page: 'customer.html' },
+          staff: { title: 'Mode: Staff Desk', color: 'var(--color-success)', page: 'staff.html' },
+          admin: { title: 'Mode: Executive Admin', color: '#A855F7', page: 'admin.html' }
+        };
+
+        const currentMeta = roleMeta[this.currentRole] || roleMeta.customer;
+        if (text) text.textContent = currentMeta.title;
+        if (dot) {
+          dot.style.backgroundColor = currentMeta.color;
+          dot.style.boxShadow = `0 0 8px ${currentMeta.color}`;
+        }
+
+        if (avatar && this.currentUser?.avatar) avatar.src = this.currentUser.avatar;
+        if (name && this.currentUser?.name) name.textContent = this.currentUser.name;
+
+        // Toggle Active Role Button in Universal Header
+        document.querySelectorAll('.u-role-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.role === this.currentRole);
+        });
+
+        // Set Viewport Frame if changed
+        if (this.frame && !this.frame.src.endsWith(currentMeta.page)) {
+          this.frame.src = currentMeta.page;
+        }
+      }
+
+      async switchRole(targetRole) {
+        if (this.currentRole === targetRole) return;
+        this.currentRole = targetRole;
+
+        // Auto authenticate with demo user for target role
+        await this.loginAsDemo(targetRole, false);
+        this.updateHeaderUI();
+        this.showToast(`Switched to ${targetRole.toUpperCase()} Portal`, 'success');
+      }
+
+      async loginAsDemo(role, notify = true) {
+        const demoAccounts = {
+          customer: { role: 'customer', email: 'guest@surambaw.com' },
+          staff: { role: 'staff', email: 'staff@surambaw.com' },
+          admin: { role: 'admin', email: 'admin@surambaw.com' }
+        };
+
+        const res = await ResortAPI.login(demoAccounts[role] || { role });
+        if (res && res.success && res.user) {
+          this.currentUser = res.user;
+          this.currentRole = res.user.role;
+          this.closeAuthModal();
+          this.updateHeaderUI();
+          if (notify) {
+            this.showToast(`Signed in as ${res.user.name} (${this.currentRole.toUpperCase()})`, 'success');
+          }
+        }
+      }
+
+      openAuthModal(tab = 'signin') {
+        const modal = document.getElementById('universalAuthModal');
+        if (modal) {
+          modal.classList.add('active');
+          this.switchAuthTab(tab);
+        }
+      }
+
+      closeAuthModal() {
+        document.getElementById('universalAuthModal')?.classList.remove('active');
+      }
+
+      openLogoutModal() {
+        document.getElementById('universalLogoutModal')?.classList.add('active');
+      }
+
+      closeLogoutModal() {
+        document.getElementById('universalLogoutModal')?.classList.remove('active');
+      }
+
+      switchAuthTab(tab) {
+        const btnIn = document.getElementById('tabBtnSignIn');
+        const btnUp = document.getElementById('tabBtnSignUp');
+        const formIn = document.getElementById('formSignIn');
+        const formUp = document.getElementById('formSignUp');
+
+        if (btnIn) btnIn.classList.toggle('active', tab === 'signin');
+        if (btnUp) btnUp.classList.toggle('active', tab === 'signup');
+        if (formIn) formIn.style.display = tab === 'signin' ? 'block' : 'none';
+        if (formUp) formUp.style.display = tab === 'signup' ? 'block' : 'none';
+      }
+
+      async performLogout() {
+        await ResortAPI.logout();
+        this.closeLogoutModal();
+        this.currentUser = null;
+        this.currentRole = 'customer';
+        this.updateHeaderUI();
+        this.showToast('You have been logged out.', 'info');
+        this.openAuthModal('signin');
+      }
+
+      bindEvents() {
+        // Role Switch Buttons
+        document.getElementById('btnRoleCustomer')?.addEventListener('click', () => this.switchRole('customer'));
+        document.getElementById('btnRoleStaff')?.addEventListener('click', () => this.switchRole('staff'));
+        document.getElementById('btnRoleAdmin')?.addEventListener('click', () => this.switchRole('admin'));
+
+        // Header Actions
+        document.getElementById('uQuickSwitchBtn')?.addEventListener('click', () => this.openAuthModal());
+        document.getElementById('uLogoutBtn')?.addEventListener('click', () => this.openLogoutModal());
+
+        // Modal Closures
+        document.getElementById('authModalCloseBtn')?.addEventListener('click', () => this.closeAuthModal());
+        document.getElementById('logoutCloseBtn')?.addEventListener('click', () => this.closeLogoutModal());
+        document.getElementById('cancelLogoutBtn')?.addEventListener('click', () => this.closeLogoutModal());
+        document.getElementById('confirmLogoutBtn')?.addEventListener('click', () => this.performLogout());
+
+        // Tab Switching
+        document.getElementById('tabBtnSignIn')?.addEventListener('click', () => this.switchAuthTab('signin'));
+        document.getElementById('tabBtnSignUp')?.addEventListener('click', () => this.switchAuthTab('signup'));
+
+        // Form Submit: Sign In
+        document.getElementById('formSignIn')?.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const email = document.getElementById('authEmail').value;
+          const password = document.getElementById('authPassword').value;
+          const res = await ResortAPI.login({ email, password });
+          if (res && res.success && res.user) {
+            this.currentUser = res.user;
+            this.currentRole = res.user.role;
+            this.closeAuthModal();
+            this.updateHeaderUI();
+            this.showToast(`Welcome back, ${res.user.name}!`, 'success');
+          } else {
+            this.showToast(res.message || 'Invalid email or password.', 'error');
+          }
+        });
+
+        // Form Submit: Sign Up
+        document.getElementById('formSignUp')?.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const name = document.getElementById('regName').value;
+          const email = document.getElementById('regEmail').value;
+          const phone = document.getElementById('regPhone').value;
+          const password = document.getElementById('regPassword').value;
+          const res = await ResortAPI.register({ name, email, phone, password });
+          if (res && res.success && res.user) {
+            this.currentUser = res.user;
+            this.currentRole = 'customer';
+            this.closeAuthModal();
+            this.updateHeaderUI();
+            this.showToast(`Account created! Welcome, ${res.user.name}.`, 'success');
+          } else {
+            this.showToast(res.message || 'Registration failed.', 'error');
+          }
+        });
+
+        // Listen for messages from child frames (e.g. inner logout buttons or inner booking completions)
+        window.addEventListener('message', async (e) => {
+          if (!e.data) return;
+          if (e.data.action === 'logout') {
+            this.openLogoutModal();
+          } else if (e.data.action === 'switchRole') {
+            this.switchRole(e.data.role);
+          } else if (e.data.action === 'reservationCreated') {
+            this.showToast('Reservation synchronized to all resort systems!', 'success');
+          }
+        });
+      }
+
+      showToast(message, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        if (!container) return;
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.style.cssText = `
+          background: #0B3954;
+          color: #FFFFFF;
+          padding: 0.8rem 1.25rem;
+          border-radius: 10px;
+          margin-bottom: 0.5rem;
+          box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+          font-size: 0.88rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          border-left: 4px solid ${type === 'success' ? '#3BAA7C' : type === 'error' ? '#FF7F6A' : '#F4E3C1'};
+          animation: fadeIn 0.3s ease;
+        `;
+        toast.innerHTML = `<span>${message}</span>`;
+        container.appendChild(toast);
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateY(-10px)';
+          toast.style.transition = 'all 0.3s ease';
+          setTimeout(() => toast.remove(), 300);
+        }, 3500);
+      }
+    }
+
+    // Initialize Master Controller
+    window.UnifiedPortal = new UnifiedAppController();
+  </script>
+</body>
+</html>

@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Surambaw Beach Resort | Executive Admin Portal</title>
+  
+  <!-- Shared CSS Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <style>
+    /* Admin Dashboard Specific Layout Override */
+    body {
+      display: flex;
+      flex-direction: row;
+      min-height: 100vh;
+      background-color: var(--color-bg);
+    }
+
+    /* Admin Sidebar Layout */
+    .admin-sidebar {
+      width: 280px;
+      background-color: var(--color-nav);
+      color: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      min-height: 100vh;
+      position: sticky;
+      top: 0;
+      box-shadow: 4px 0 20px rgba(11, 57, 84, 0.15);
+      z-index: 90;
+    }
+
+    .admin-sidebar-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .admin-nav-group {
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .admin-nav-group-title {
+      padding: 0.4rem 1.5rem;
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: var(--color-highlight);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .admin-nav-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.65rem 1.5rem;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all var(--transition-fast);
+      text-decoration: none;
+    }
+
+    .admin-nav-link:hover {
+      color: var(--color-highlight);
+      background-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .admin-nav-link.active {
+      color: var(--color-nav);
+      background-color: var(--color-highlight);
+      font-weight: 700;
+    }
+
+    .admin-nav-link.active .icon {
+      stroke: var(--color-nav);
+    }
+
+    /* Admin Main Wrapper */
+    .admin-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .admin-topbar {
+      background-color: var(--color-card);
+      padding: 1rem 2rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 80;
+      border-bottom: 1px solid rgba(36, 59, 83, 0.08);
+    }
+
+    .admin-content {
+      padding: 2rem;
+      flex: 1;
+    }
+
+    @media (max-width: 1024px) {
+      body {
+        flex-direction: column;
+      }
+      .admin-sidebar {
+        width: 100%;
+        min-height: auto;
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar Navigation Tree -->
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar-header">
+      <a href="#" class="brand-link" data-view="dashboard">
+        <div class="brand-icon-wrapper" style="background: linear-gradient(135deg, var(--color-primary), var(--color-highlight));">
+          <svg class="icon icon-lg" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        </div>
+        <div class="brand-text-container">
+          <span class="brand-title">Surambaw</span>
+          <span class="brand-subtitle" style="color: var(--color-highlight);">ADMIN PORTAL</span>
+        </div>
+      </a>
+    </div>
+
+    <div style="overflow-y: auto; flex: 1;">
+      
+      <!-- MAIN -->
+      <div class="admin-nav-group">
+        <div class="admin-nav-group-title">MAIN</div>
+        <a href="#" class="admin-nav-link active" data-view="dashboard">
+          <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          <span>Dashboard</span>
+        </a>
+      </div>
+
+      <!-- BOOKING MANAGEMENT -->
+      <div class="admin-nav-group">
+        <div class="admin-nav-group-title">BOOKING MANAGEMENT</div>
+        <a href="#" class="admin-nav-link" data-view="reservations">
+          <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span>Reservations</span>
+        </a>
+      </div>
+
+      <!-- GUEST MANAGEMENT -->
+      <div class="admin-nav-group">
+        <div class="admin-nav-group-title">GUEST MANAGEMENT</div>
+        <a href="#" class="admin-nav-link" data-view="guests">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span>Guests</span>
+        </a>
+      </div>
+
+      <!-- RESORT MANAGEMENT -->
+      <div class="admin-nav-group">
+        <div class="admin-nav-group-title">RESORT MANAGEMENT</div>
+        <a href="#" class="admin-nav-link" data-view="accommodations">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M18 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/><path d="M9 22v-4h6v4"/></svg>
+          <span>Accommodations</span>
+        </a>
+        <a href="#" class="admin-nav-link" data-view="categories">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          <span>Categories</span>
+        </a>
+        <a href="#" class="admin-nav-link" data-view="rates">
+          <svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          <span>Rates</span>
+        </a>
+      </div>
+
+      <!-- INVENTORY -->
+      <div class="admin-nav-group">
+        <div class="admin-nav-group-title">INVENTORY</div>
+        <a href="#" class="admin-nav-link" data-view="inventory">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          <span>Inventory</span>
+        </a>
+      </div>
+
+      <!-- FINANCE -->
+      <div class="admin-nav-group">
+        <div class="admin-nav-group-title">FINANCE</div>
+        <a href="#" class="admin-nav-link" data-view="revenue">
+          <svg class="icon" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          <span>Revenue</span>
+        </a>
+      </div>
+
+      <!-- ANALYTICS -->
+      <div class="admin-nav-group">
+        <div class="admin-nav-group-title">ANALYTICS</div>
+        <a href="#" class="admin-nav-link" data-view="reports">
+          <svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+          <span>Reports</span>
+        </a>
+        <a href="#" class="admin-nav-link" data-view="performance">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>Performance</span>
+        </a>
+      </div>
+
+      <!-- SYSTEM -->
+      <div class="admin-nav-group">
+        <div class="admin-nav-group-title">SYSTEM</div>
+        <a href="#" class="admin-nav-link" data-view="staff">
+          <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <span>Staff / Users</span>
+        </a>
+        <a href="#" class="admin-nav-link" data-view="notifications">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span>Notifications</span>
+        </a>
+        <a href="#" class="admin-nav-link" data-view="settings">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span>Settings</span>
+        </a>
+        <a href="#" class="admin-nav-link logout-btn" data-view="logout" style="color: #FF7F6A;">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <span>Logout</span>
+        </a>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- Main Executive Content Area -->
+  <div class="admin-wrapper">
+    
+    <!-- Top Header -->
+    <header class="admin-topbar">
+      <div style="font-size: 1.1rem; font-weight: 700; color: var(--color-nav); font-family: Outfit;">
+        Executive Administration Console
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 1.5rem;">
+        <button style="position: relative; color: var(--color-text);" onclick="switchView('notifications');">
+          <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span style="position: absolute; top: -2px; right: -2px; width: 10px; height: 10px; background: var(--color-primary); border-radius: 50%;"></span>
+        </button>
+
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80" alt="Victor Ramirez" id="headerAdminAvatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--color-highlight);" />
+          <div>
+            <strong style="display: block; font-size: 0.88rem;" id="headerAdminName">Victor Ramirez</strong>
+            <span style="font-size: 0.72rem; color: var(--color-muted);">General Manager</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content Views -->
+    <div class="admin-content">
+
+      <!-- 1. DASHBOARD -->
+      <section class="view-section active" id="view-dashboard">
+        <div class="section-header">
+          <div class="section-title-group">
+            <h2 class="section-title">Resort Executive Dashboard</h2>
+            <p class="section-subtitle">Real-time revenue metrics, accommodation rankings, inventory stock, and recent activity.</p>
+          </div>
+        </div>
+
+        <!-- REVENUE OVERVIEW CARDS -->
+        <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
+          <div class="stat-card primary">
+            <div class="stat-icon-wrapper">
+              <svg class="icon icon-lg" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">₱1,842,500</span>
+              <span class="stat-label">Total Revenue</span>
+            </div>
+          </div>
+
+          <div class="stat-card sand">
+            <div class="stat-icon-wrapper">
+              <svg class="icon icon-lg" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">142</span>
+              <span class="stat-label">Total Reservations</span>
+            </div>
+          </div>
+
+          <div class="stat-card success">
+            <div class="stat-icon-wrapper">
+              <svg class="icon icon-lg" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">₱12,975</span>
+              <span class="stat-label">Average Booking Value</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrapper">
+              <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">118 Stays</span>
+              <span class="stat-label">Completed Stays</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 SUMMARY CARDS (Accommodation Performance, Inventory Overview, Guest Overview) -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+          
+          <!-- Accommodation Performance Summary -->
+          <div class="card" style="padding: 1.5rem;">
+            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-secondary);">Accommodation Performance</h3>
+            <div style="font-size: 0.9rem; line-height: 1.6;">
+              <p style="margin-bottom: 0.4rem;">Best Performing: <strong style="color: var(--color-primary);">Royal Overwater Villa</strong></p>
+              <p style="margin-bottom: 0.4rem;">Most Booked Category: <strong style="color: var(--color-secondary);">Luxury Villas (67%)</strong></p>
+              <p>Average Monthly Occupancy: <strong>82%</strong></p>
+            </div>
+          </div>
+
+          <!-- Inventory Overview Summary -->
+          <div class="card" style="padding: 1.5rem;">
+            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-secondary);">Inventory Overview</h3>
+            <div style="font-size: 0.9rem; line-height: 1.6;">
+              <p style="margin-bottom: 0.4rem;">Total Tracked Items: <strong>48 Items</strong></p>
+              <p style="margin-bottom: 0.4rem;">Low-stock Items: <strong style="color: #D97706;">3 Items</strong></p>
+              <p>Out-of-stock Items: <strong style="color: #EF4444;">1 Item (Sunscreen SPF50)</strong></p>
+            </div>
+          </div>
+
+          <!-- Guest Overview Summary -->
+          <div class="card" style="padding: 1.5rem;">
+            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-secondary);">Guest CRM Overview</h3>
+            <div style="font-size: 0.9rem; line-height: 1.6;">
+              <p style="margin-bottom: 0.4rem;">Total Registered Guests: <strong>320 Guests</strong></p>
+              <p style="margin-bottom: 0.4rem;">New Guests (This Month): <strong style="color: var(--color-success);">45 New</strong></p>
+              <p>Returning VIP Guests: <strong>275 (86%)</strong></p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ACCOMMODATION RANKINGS & RECENT ACTIVITY GRID -->
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; align-items: start;">
+          
+          <!-- Accommodation Rankings Table -->
+          <div class="card" style="padding: 1.5rem;">
+            <h3 style="font-size: 1.2rem; margin-bottom: 1rem; color: var(--color-secondary);">Accommodation Rankings & Revenue</h3>
+            <div style="overflow-x: auto;">
+              <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem;">
+                <thead>
+                  <tr style="border-bottom: 2px solid rgba(36,59,83,0.1); color: var(--color-muted);">
+                    <th style="padding: 0.6rem;">Rank</th>
+                    <th style="padding: 0.6rem;">Accommodation</th>
+                    <th style="padding: 0.6rem;">Category</th>
+                    <th style="padding: 0.6rem;">Bookings</th>
+                    <th style="padding: 0.6rem;">Total Revenue</th>
+                    <th style="padding: 0.6rem;">Occupancy</th>
+                  </tr>
+                </thead>
+                <tbody id="dashRankingsList">
+                  <!-- Injected by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Recent Activity & Top Guests -->
+          <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+            <div class="card" style="padding: 1.5rem;">
+              <h3 style="font-size: 1.15rem; margin-bottom: 1rem; color: var(--color-secondary);">Recent System Activity</h3>
+              <div id="dashRecentActivityList"></div>
+            </div>
+
+            <div class="card" style="padding: 1.5rem;">
+              <h3 style="font-size: 1.15rem; margin-bottom: 1rem; color: var(--color-secondary);">Top Guests (By Revenue)</h3>
+              <div id="dashTopGuestsList"></div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- 2. RESERVATIONS (BOOKING MANAGEMENT) -->
+      <section class="view-section" id="view-reservations">
+        <div class="section-header">
+          <div class="section-title-group">
+            <h2 class="section-title">All Reservations Management</h2>
+            <p class="section-subtitle">View and filter reservations by status: Pending, Confirmed, Checked-in, Checked-out, Cancelled.</p>
+          </div>
+        </div>
+
+        <div class="browse-filter-bar">
+          <div class="filter-tabs">
+            <button class="filter-tab active">All Reservations</button>
+            <button class="filter-tab">Pending</button>
+            <button class="filter-tab">Confirmed</button>
+            <button class="filter-tab">Checked-in</button>
+            <button class="filter-tab">Checked-out</button>
+            <button class="filter-tab">Cancelled</button>
+          </div>
+        </div>
+
+        <div class="card" style="padding: 1.5rem;">
+          <p style="color: var(--color-muted); text-align: center; padding: 2rem;">Executive reservation control panel active. Select a status tab above to filter live reservations.</p>
+        </div>
+      </section>
+
+      <!-- 3. GUESTS (GUEST MANAGEMENT) -->
+      <section class="view-section" id="view-guests">
+        <div class="section-header">
+          <div class="section-title-group">
+            <h2 class="section-title">Guest Directory & Profiles</h2>
+            <p class="section-subtitle">Manage guest master records, VIP loyalty status, and historical reservations.</p>
+          </div>
+        </div>
+
+        <div class="card" style="padding: 1.5rem;">
+          <p style="color: var(--color-muted); text-align: center; padding: 2rem;">Full guest directory loaded. Includes search, profile drawer, and reservation history.</p>
+        </div>
+      </section>
+
+      <!-- 4. ACCOMMODATIONS (RESORT MANAGEMENT) -->
+      <section class="view-section" id="view-accommodations">
+        <div class="section-header">
+          <div class="section-title-group">
+            <h2 class="section-title">Accommodations Catalog</h2>
+            <p class="section-subtitle">Manage Rooms, Cottages, and Villas inventory, pricing, and amenities.</p>
+          </div>
+        </div>
+
+        <div class="browse-filter-bar">
+          <div class="filter-tabs">
+            <button class="filter-tab active">All Accommodations</button>
+            <button class="filter-tab">Rooms</button>
+            <button class="filter-tab">Cottages</button>
+            <button class="filter-tab">Villas</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. CATEGORIES (RESORT MANAGEMENT) -->
+      <section class="view-section" id="view-categories">
+        <div class="section-header">
+          <div class="section-title-group">
+            <h2 class="section-title">Accommodation & Add-on Categories</h2>
+            <p class="section-subtitle">Define room categories (Standard Room, Deluxe Room, Beachfront Cottage, Family Villa, Overwater Bungalow, Add-ons).</p>
+          </div>
+          <button class="btn btn-primary btn-sm" id="addCategoryModalBtn">+ Add New Category</button>
+        </div>
+
+        <div class="cards-grid" id="adminCategoriesGrid">
+          <!-- Injected by JS -->
+        </div>
+      </section>
+
+      <!-- 6. RATES (RESORT MANAGEMENT) -->
+      <section class="view-section" id="view-rates">
+        <div class="section-header">
+          <div class="section-title-group">
+            <h2 class="section-title">Pricing & Rate Schedules</h2>
+            <p class="section-subtitle">Set standard rates, peak season pricing, low season pricing, and add-on pricing.</p>
+          </div>
+        </div>
+
+        <div class="card" style="padding: 1.5rem; overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+            <thead>
+              <tr style="border-bottom: 2px solid rgba(36,59,83,0.1); color: var(--color-muted);">
+                <th style="padding: 0.75rem;">Category</th>
+                <th style="padding: 0.75rem;">Standard Rate</th>
+                <th style="padding: 0.75rem;">Peak Season Rate</th>
+                <th style="padding: 0.75rem;">Low Season Rate</th>
+                <th style="padding: 0.75rem;">Status</th>
+                <th style="padding: 0.75rem;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="adminRatesTableBody">
+              <!-- Injected by JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 7. INVENTORY (INVENTORY) -->
+      <section class="view-section" id="view-inventory">
+        <div class="section-header">
+          <div class="section-title-group">
+            <h2 class="section-title">Resort Inventory Control</h2>
+            <p class="section-subtitle">Track stock levels, low-stock items, out-of-stock items, add stock, and deduct stock.</p>
+          </div>
+          <button class="btn btn-primary btn-sm" id="openAddStockModalBtn">+ Stock Movement</button>
+        </div>
+
+        <div class="browse-filter-bar">
+          <div class="filter-tabs">
+            <button class="filter-tab active inv-filter-tab" data-inv="all">All Items (48)</button>
+            <button class="filter-tab inv-filter-tab" data-inv="low">Low Stock (3)</button>
+            <button class="filter-tab inv-filter-tab" data-inv="out">Out of Stock (1)</button>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; align-items: start;">
+          <div class="card" style="padding: 1.5rem; overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+              <thead>
+                <tr style="border-bottom: 2px solid rgba(36,59,83,0.1); color: var(--color-muted);">
+                  <th style="padding: 0.75rem;">Item ID</th>
+                  <th style="padding: 0.75rem;">Item Name</th>
+                  <th style="padding: 0.75rem;">Category</th>
+                  <th style="padding: 0.75rem;">In Stock</th>
+                  <th style="padding: 0.75rem;">Status</th>
+                  <th style="padding: 0.75rem;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminInventoryTableBody">
+                <!-- Injected by JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card" style="padding: 1.5rem;">
+            <h3 style="font-size: 1.15rem; margin-bottom: 1rem; color: var(--color-secondary);">Recent Stock History Log</h3>
+            <div id="adminStockHistoryLog"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. REVENUE (FINANCE) -->
+      <section class="view-section" id="view-revenue">
+        <div class="section-header">
+          <div class="section-title-group">
+            <h2 class="section-title">Revenue & Financial Analytics</h2>
+            <p class="section-subtitle">Filter revenue by Today, This Week, This Month, or Custom Date Range.</p>
+          </div>
+        </div>
+
+        <div class="browse-filter-bar">
+          <div class="filter-tabs">
+            <button class="filter-tab">Today (₱128,500)</button>
+            <button class="filter-tab">This Week (₱542,000)</button>
+            <button class="filter-tab active">This Month (₱1,842,500)</button>
+            <button class="filter-tab">Custom Date Range</button>
+          </div>
+        </div>
+
+        <div class="card" style="padding: 1.75rem;">
+          <h3 style="font-size: 1.2rem; margin-bottom: 1.5rem; color: var(--color-secondary);">Revenue Breakdown by Category</h3>
+          <div id="adminRevenueCategoryBars"></div>
+        </div>
+      </section>
+
+      <!-- 9. REPORTS (ANALYTICS) -->
+      <section class="view-section" id="view-reports">
+        <div class="section-header">
+          <div class="section-title-group">
+            <h2 class="section-title">Executive Reports Library</h2>
+            <p class="section-subtitle">Generate exportable PDF & Excel reports for Revenue, Occupancy, Reservations, Guests, and Inventory.</p>
+          </div>
+        </div>
+
+        <div class="cards-grid" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));">
+          <div class="card" style="padding: 1.5rem; text-align: center;">
+            <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Revenue Report</h4>
+            <p style="font-size: 0.85rem; color: var(--color-muted); margin-bottom: 1rem;">Complete financial breakdown and tax statement.</p>
+            <button class="btn btn-primary btn-sm generate-report-btn" data-report="Revenue">Generate PDF</button>
+          </div>
+
+          <div class="card" style="padding: 1.5rem; text-align: center;">
+            <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Occupancy Report</h4>
+            <p style="font-size: 0.85rem; color: var(--color-muted); margin-bottom: 1rem;">Monthly room fill rates and seasonal trends.</p>
+            <button class="btn btn-primary btn-sm generate-report-btn" data-report="Occupancy">Generate PDF</button>
+          </div>
+
+          <div class="card" style="padding: 1.5rem; text-align: center;">
+            <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Inventory Report</h4>
+            <p style="font-size: 0.85rem; color: var(--color-muted); margin-bottom: 1rem;">Stock audit log and reorder recommendations.</p>
+            <button class="btn btn-primary btn-sm generate-report-btn" data-report="Inventory">Generate PDF</button>
+          </div>
+
+          <div class="card" style="padding: 1.5rem; text-align: center;">
+            <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Guest Loyalty Report</h4>
+            <p style="font-size: 0.85rem; color: var(--color-muted); margin-bottom: 1rem;">VIP tiers, guest demographics, and lifetime spend.</p>
+            <button class="btn btn-primary btn-sm generate-report-btn" data-report="Guest">Generate PDF</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 10. PERFORMANCE (ANALYTICS) -->
+      <section class="view-section" id="view-performance">
+        <div class="section-header">
+          <div class="section-title-group">
+            <h2 class="section-title">Resort Performance Metrics</h2>
+            <p class="section-subtitle">Accommodation, Amenity, and Category Performance comparisons.</p>
+          </div>
+        </div>
+
+        <div id="adminPerformanceMatrix"></div>
+      </section>
+
+      <!-- 11. STAFF / USERS (SYSTEM) -->
+      <section class="view-section" id="view-staff">
+        <div class="section-header">
+          <div class="section-title-group">
+            <h2 class="section-title">Staff Accounts & Access Management</h2>
+            <p class="section-subtitle">Manage staff user credentials, role assignments, and system permission levels.</p>
+          </div>
+          <button class="btn btn-primary btn-sm" id="addStaffModalBtn">+ Create Staff Account</button>
+        </div>
+
+        <div class="card" style="padding: 1.5rem; overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+            <thead>
+              <tr style="border-bottom: 2px solid rgba(36,59,83,0.1); color: var(--color-muted);">
+                <th style="padding: 0.75rem;">Staff ID</th>
+                <th style="padding: 0.75rem;">Full Name</th>
+                <th style="padding: 0.75rem;">Email Address</th>
+                <th style="padding: 0.75rem;">Role</th>
+                <th style="padding: 0.75rem;">Access Level</th>
+                <th style="padding: 0.75rem;">Status</th>
+                <th style="padding: 0.75rem;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="adminStaffTableBody">
+              <!-- Injected by JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 12. NOTIFICATIONS (SYSTEM) -->
+      <section class="view-section" id="view-notifications">
+        <div class="section-header">
+          <div class="section-title-group">
+            <h2 class="section-title">System Notifications & Alerts</h2>
+            <p class="section-subtitle">Real-time alerts for low stock, high occupancy warnings, and financial updates.</p>
+          </div>
+        </div>
+
+        <div id="adminNotificationsList"></div>
+      </section>
+
+      <!-- 13. SETTINGS (SYSTEM) -->
+      <section class="view-section" id="view-settings">
+        <div class="section-header">
+          <div class="section-title-group">
+            <h2 class="section-title">Resort Property Configuration</h2>
+            <p class="section-subtitle">Configure resort property details, tax rates (12% VAT), service fee (5%), and currency.</p>
+          </div>
+        </div>
+
+        <div class="card" style="padding: 2rem;">
+          <form id="adminSettingsForm">
+            <!-- Injected by JS -->
+          </form>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Modal Overlay -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalTitle">Admin Console Dialog</h3>
+        <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close modal">
+          <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-footer" id="modalFooter"></div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- JavaScript Files -->
+  <script src="js/admin-data.js"></script>
+  <script src="js/sync.js"></script>
+  <script src="js/admin-app.js"></script>
+</body>
+</html>
