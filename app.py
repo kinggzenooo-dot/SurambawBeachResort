@@ -264,6 +264,9 @@ def seed_data(cursor):
         VALUES (?, ?, ?, ?)
     ''', history)
 
+# Initialize and seed database on startup (supports both gunicorn and direct python execution)
+init_db()
+
 # ==================== AUTH APIS ====================
 
 @app.route('/api/auth/login', methods=['POST'])

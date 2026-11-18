@@ -96,3 +96,31 @@ http://localhost:5000/
 ```
 - Click the **Guest**, **Staff Desk**, or **Admin** buttons on the top bar to switch roles instantly.
 - Test making a booking in the Guest view, then switch to Staff or Admin to see the new reservation synchronized live!
+
+
+---
+
+## ☁️ How to Deploy on Render (render.com)
+
+Deploying Surambaw Beach Resort to **Render** takes less than 2 minutes:
+
+### Option 1: Automatic Blueprint (Recommended)
+1. Go to [https://dashboard.render.com](https://dashboard.render.com) and log in (e.g., with your GitHub account).
+2. Click **New +** and select **Blueprint**.
+3. Connect your GitHub repository: `https://github.com/kinggzenooo-dot/SurambawBeachResort.git`.
+4. Render will read `render.yaml` automatically. Click **Apply**.
+5. Once deployment completes, click the provided live URL (`https://surambaw-beach-resort.onrender.com`).
+
+### Option 2: Standard Web Service
+1. In the Render Dashboard, click **New +** ➔ **Web Service**.
+2. Select your repository: `kinggzenooo-dot/SurambawBeachResort`.
+3. Configure the settings:
+   - **Name**: `surambaw-beach-resort` (or your choice)
+   - **Language**: `Python 3`
+   - **Region**: `Singapore (Southeast Asia)` or closest region
+   - **Branch**: `main`
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `gunicorn app:app`
+   - **Plan**: `Free`
+4. Click **Deploy Web Service**.
+5. Your resort system will be live on Render with full backend API support, role switching, and database persistence!
