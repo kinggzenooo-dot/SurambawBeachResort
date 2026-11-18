@@ -5,11 +5,30 @@ from datetime import datetime, date
 from flask import Flask, request, jsonify, session, send_from_directory, render_template_string
 from flask_cors import CORS
 
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except Exception:
+    pass
+
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(APP_DIR, 'resort.db')
 
+# Supabase Connection Setup
+SUPABASE_URL = os.environ.get('VITE_SUPABASE_URL') or os.environ.get('SUPABASE_URL') or 'https://cgssryoqqsfxwnirmxzb.supabase.co'
+SUPABASE_KEY = os.environ.get('VITE_SUPABASE_ANON_KEY') or os.environ.get('SUPABASE_KEY') or 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNnc3NyeW9xcXNmeHduaXJteHpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ5ODAzMTksImV4cCI6MjExMDU1NjMxOX0.I8gQzyMn4c3LBVqpwKxlCsK1lGm2aRI6SoVsltKaD4s'
+
+supabase = None
+try:
+    from supabase import create_client
+    if SUPABASE_URL and SUPABASE_KEY:
+        supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+        print("Connected to Supabase successfully:", SUPABASE_URL)
+except Exception as e:
+    print("Supabase connection fallback to SQLite:", e)
+
 app = Flask(__name__, static_folder=APP_DIR)
-app.secret_key = 'surambaw_beach_resort_secret_key_2026'
+app.secret_key = os.environ.get('SECRET_KEY', 'surambaw_beach_resort_secret_key_2026')
 CORS(app)
 
 def get_db():
@@ -339,6 +358,21 @@ def api_register():
     session['user_role'] = 'customer'
     conn.close()
 
+    # Synchronize to Supabase if connected
+    if supabase:
+        try:
+            supabase.table('users').insert({
+                'id': user_id,
+                'name': name,
+                'email': email,
+                'password': password,
+                'role': 'customer',
+                'phone': phone,
+                'tier': 'Surambaw Guest Member'
+            }).execute()
+        except Exception as sb_err:
+            pass
+
     return jsonify({'success': True, 'user': user_dict})
 
 @app.route('/api/auth/me', methods=['GET'])
@@ -478,6 +512,36 @@ def api_reservations():
         res = dict(cursor.fetchone())
         res['addons'] = json.loads(res['addons_json']) if res['addons_json'] else []
         conn.close()
+
+        # Synchronize to Supabase if connected
+        if supabase:
+            try:
+                supabase.table('reservations').insert({
+                    'id': res_id,
+                    'code': code,
+                    'guest_id': user_id,
+                    'guest_name': guest_name,
+                    'guest_email': guest_email,
+                    'guest_phone': guest_phone,
+                    'accommodation_id': accommodation_id,
+                    'accommodation_name': accommodation_name,
+                    'category': category,
+                    'check_in': check_in,
+                    'check_out': check_out,
+                    'nights': nights,
+                    'guests_count': guests_count,
+                    'subtotal': subtotal,
+                    'tax': tax,
+                    'discount': discount,
+                    'total': total,
+                    'paid': paid,
+                    'balance': balance,
+                    'status': status,
+                    'special_requests': special_requests
+                }).execute()
+            except Exception as sb_err:
+                pass
+
         return jsonify({'success': True, 'reservation': res})
 
     # GET reservations
@@ -518,6 +582,11 @@ def api_update_reservation_status(res_id):
     if row:
         d = dict(row)
         d['addons'] = json.loads(d['addons_json']) if d['addons_json'] else []
+        if supabase:
+            try:
+                supabase.table('reservations').update({'status': new_status}).eq('id', res_id).execute()
+            except Exception as sb_err:
+                pass
         return jsonify({'success': True, 'reservation': d})
     return jsonify({'success': False, 'message': 'Reservation not found'}), 404
 
@@ -608,7 +677,22 @@ def api_inventory_adjust():
     updated_item = dict(cursor.fetchone())
     conn.close()
 
+    if supabase:
+        try:
+            supabase.table('inventory').update({'in_stock': new_stock, 'status': new_status}).eq('id', item_id).execute()
+        except Exception as sb_err:
+            pass
+
     return jsonify({'success': True, 'item': updated_item, 'action': action_text})
+
+@app.route('/api/config', methods=['GET'])
+def api_config():
+    return jsonify({
+        'success': True,
+        'supabase_url': SUPABASE_URL,
+        'supabase_connected': supabase is not None,
+        'database_mode': 'hybrid_supabase_sqlite'
+    })
 
 # ==================== STATS APIS ====================
 

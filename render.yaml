@@ -8,3 +8,9 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.12.0
+      - key: VITE_SUPABASE_URL
+        value: https://cgssryoqqsfxwnirmxzb.supabase.co
+      - key: VITE_SUPABASE_ANON_KEY
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNnc3NyeW9xcXNmeHduaXJteHpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ5ODAzMTksImV4cCI6MjExMDU1NjMxOX0.I8gQzyMn4c3LBVqpwKxlCsK1lGm2aRI6SoVsltKaD4s
+      - key: SECRET_KEY
+        generateValue: true
